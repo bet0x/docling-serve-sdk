@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docling-serve-sdk"
-version = "1.0.0"
+version = "1.2.0"
 description = "A Python SDK for interacting with Docling Serve API using Pydantic models"
 readme = "README.md"
 requires-python = ">=3.8.1"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Alberto Ferrer", email = "albertof@barrahome.org"},
 ]
@@ -16,7 +16,6 @@ keywords = ["docling", "document", "processing", "ocr", "pdf", "conversion", "ch
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -35,6 +34,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
     "black>=23.0.0",
@@ -88,3 +89,4 @@ python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+

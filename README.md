@@ -1,33 +1,57 @@
 # Docling Serve SDK
 
-A Python SDK for interacting with Docling Serve API using Pydantic models.
+A comprehensive Python SDK for interacting with Docling Serve API using Pydantic models. This SDK provides type-safe, async/sync support for document conversion, chunking, and processing.
+
+[![PyPI version](https://badge.fury.io/py/docling-serve-sdk.svg)](https://badge.fury.io/py/docling-serve-sdk)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Author:** [Alberto Ferrer](https://www.barrahome.org)  
 **Email:** albertof@barrahome.org  
-**Repository:** [https://github.com/bet0x/docling-serve-sdk](https://github.com/bet0x/docling-serve-sdk)
+**Repository:** [https://github.com/bet0x/docling-serve-sdk](https://github.com/bet0x/docling-serve-sdk)  
+**PyPI:** [https://pypi.org/project/docling-serve-sdk/](https://pypi.org/project/docling-serve-sdk/)
 
 ## Features
 
-- ✅ Document conversion (PDF, DOCX, HTML, images, etc.)
-- ✅ OCR processing with multiple engines
-- ✅ Table extraction and structure analysis
-- ✅ Image handling and processing
-- ✅ Async/sync support
-- ✅ Type-safe with Pydantic models
-- ✅ Comprehensive error handling
+- ✅ **Document Conversion**: PDF, DOCX, PPTX, HTML, images, and more
+- ✅ **Multiple Source Types**: Local files, HTTP URLs, S3 storage
+- ✅ **Flexible Output**: In-body, ZIP, S3, PUT targets
+- ✅ **OCR Processing**: Multiple engines (EasyOCR, Tesseract, etc.)
+- ✅ **Table Extraction**: Structure analysis and cell matching
+- ✅ **Image Handling**: Processing, scaling, and embedding
+- ✅ **Chunking**: Hierarchical and hybrid document chunking
+- ✅ **Async/Sync Support**: Both synchronous and asynchronous operations
+- ✅ **Type Safety**: Full Pydantic model validation
+- ✅ **Error Handling**: Comprehensive exception handling
+- ✅ **Production Ready**: Connection pooling, retries, timeouts
 
 ## Installation
 
+### From PyPI (Recommended)
+
 ```bash
-# Clone or download the SDK
-cd docling_serve_sdk
-
-# Install with uv
-uv pip install -e .
-
-# Or with pip
-pip install -e .
+pip install docling-serve-sdk
 ```
+
+### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/bet0x/docling-serve-sdk.git
+cd docling-serve-sdk
+
+# Install with pip
+pip install -e .
+
+# Or with uv
+uv pip install -e .
+```
+
+### Requirements
+
+- Python 3.8+
+- httpx >= 0.24.0
+- pydantic >= 2.0.0
 
 ## Quick Start
 
@@ -46,6 +70,10 @@ result = client.convert_file("document.pdf")
 print(f"Content: {result.document['md_content']}")
 ```
 
+## Documentation
+
+📖 **[Complete Usage Guide](USAGE.md)** - Comprehensive examples and advanced usage patterns
+
 ## Examples
 
 ### Basic Conversion
@@ -61,32 +89,34 @@ print(f"Processing time: {result.processing_time:.2f}s")
 print(f"Content: {result.document['md_content']}")
 ```
 
-### Custom Options
+### Advanced Usage with Multiple Sources
 
 ```python
 from docling_serve_sdk import (
-    DoclingClient, 
-    ConvertDocumentsRequestOptions,
-    InputFormat,
-    OutputFormat,
-    ImageRefMode,
-    OCREngine
+    DoclingClient, ConvertDocumentsRequest, ConvertDocumentsRequestOptions,
+    FileSourceRequest, HttpSourceRequest, ZipTarget,
+    InputFormat, OutputFormat
 )
+import base64
 
-# Create custom options
-options = ConvertDocumentsRequestOptions(
-    from_formats=[InputFormat.PDF, InputFormat.DOCX],
-    to_formats=[OutputFormat.MD, OutputFormat.HTML],
-    image_export_mode=ImageRefMode.EMBEDDED,
-    do_ocr=True,
-    ocr_engine=OCREngine.EASYOCR,
-    include_images=True,
-    images_scale=2.0
+# Create file source
+with open("document.pdf", "rb") as f:
+    content = base64.b64encode(f.read()).decode('utf-8')
+
+file_source = FileSourceRequest(base64_string=content, filename="document.pdf")
+http_source = HttpSourceRequest(url="https://example.com/doc.pdf")
+
+# Create request with multiple sources
+request = ConvertDocumentsRequest(
+    sources=[file_source, http_source],
+    options=ConvertDocumentsRequestOptions(
+        from_formats=[InputFormat.PDF, InputFormat.DOCX],
+        to_formats=[OutputFormat.MD, OutputFormat.HTML],
+        do_ocr=True,
+        include_images=True
+    ),
+    target=ZipTarget()
 )
-
-# Convert with options
-client = DoclingClient(base_url="http://localhost:5001")
-result = client.convert_file("document.pdf", options=options)
 ```
 
 ### Async Usage
@@ -161,21 +191,48 @@ except Exception as e:
 - Text
 - DocTags
 
+## API Reference
+
+### Core Classes
+
+- **`DoclingClient`**: Main client for API interactions
+- **`ConvertDocumentsRequest`**: Request model for document conversion
+- **`ConvertDocumentsRequestOptions`**: Configuration options
+- **`ConvertDocumentResponse`**: Response model for conversions
+
+### Source Types
+
+- **`FileSourceRequest`**: Local files (base64 encoded)
+- **`HttpSourceRequest`**: HTTP/HTTPS URLs
+- **`S3SourceRequest`**: S3-compatible storage
+
+### Target Types
+
+- **`InBodyTarget`**: Return in response body (default)
+- **`ZipTarget`**: Return as ZIP file
+- **`S3Target`**: Upload to S3
+- **`PutTarget`**: Upload via PUT request
+
+### Chunking
+
+- **`HierarchicalChunkerOptions`**: Hierarchical document chunking
+- **`HybridChunkerOptions`**: Hybrid semantic chunking
+
 ## Testing
 
 ```bash
-# Run tests
+# Run basic tests
 uv run python test_sdk.py
 
+# Run new features tests
+uv run python test_new_features.py
+
+# Run integration tests
+uv run python test_client_integration.py
+
 # Or with pytest
-pytest test_sdk.py
+pytest test_*.py
 ```
-
-## Requirements
-
-- Python 3.8+
-- httpx
-- pydantic
 
 ## License
 
@@ -192,5 +249,25 @@ MIT License
 ## Support
 
 For issues and questions:
-- Check the [Docling Serve documentation](https://github.com/docling-project/docling-serve)
-- Open an issue in this repository
+
+- 📖 **Documentation**: [Complete Usage Guide](USAGE.md)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/bet0x/docling-serve-sdk/issues)
+- 📦 **PyPI**: [docling-serve-sdk](https://pypi.org/project/docling-serve-sdk/)
+- 🔗 **Docling Serve**: [Official Documentation](https://github.com/docling-project/docling-serve)
+
+## Changelog
+
+### v1.1.0 (Latest)
+- ✅ Added complete API model coverage
+- ✅ Added multiple source types (File, HTTP, S3)
+- ✅ Added multiple target types (InBody, ZIP, S3, PUT)
+- ✅ Added chunking options (Hierarchical, Hybrid)
+- ✅ Added comprehensive error handling
+- ✅ Added async/sync support
+- ✅ Added complete documentation
+
+### v1.0.0
+- ✅ Initial release
+- ✅ Basic document conversion
+- ✅ Health check functionality
+- ✅ Custom options support

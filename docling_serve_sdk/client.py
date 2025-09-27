@@ -12,23 +12,10 @@ import httpx
 from httpx import Response, RequestError, HTTPStatusError
 
 from .models import (
-    ConvertDocumentsRequest,
     ConvertDocumentResponse,
-    PresignedUrlConvertDocumentResponse,
     HealthCheckResponse,
-    TaskStatusResponse,
-    ChunkDocumentResponse,
-    HierarchicalChunkerOptions,
-    HybridChunkerOptions,
-    FileSourceRequest,
-    HttpSourceRequest,
-    S3SourceRequest,
     InBodyTarget,
-    ZipTarget,
-    S3Target,
-    PutTarget,
     ConvertDocumentsRequestOptions,
-    SourceRequest,
     TargetRequest,
 )
 
