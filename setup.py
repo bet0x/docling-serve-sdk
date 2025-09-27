@@ -10,12 +10,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="docling-serve-sdk",
     version="1.0.0",
-    author="RAG MCP Team",
-    author_email="team@example.com",
+    author="Alberto Ferrer",
+    author_email="albertof@barrahome.org",
     description="A Python SDK for interacting with Docling Serve API using Pydantic models",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/your-org/docling-serve-sdk",
+    url="https://github.com/bet0x/docling-serve-sdk",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -58,8 +58,9 @@ setup(
     },
     keywords="docling document processing ocr pdf conversion chunking",
     project_urls={
-        "Bug Reports": "https://github.com/your-org/docling-serve-sdk/issues",
-        "Source": "https://github.com/your-org/docling-serve-sdk",
-        "Documentation": "https://github.com/your-org/docling-serve-sdk#readme",
+        "Homepage": "https://www.barrahome.org",
+        "Bug Reports": "https://github.com/bet0x/docling-serve-sdk/issues",
+        "Source": "https://github.com/bet0x/docling-serve-sdk",
+        "Documentation": "https://github.com/bet0x/docling-serve-sdk#readme",
     },
 )
