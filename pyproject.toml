@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docling-serve-sdk"
-version = "1.2.0"
+version = "1.2.1"
 description = "A Python SDK for interacting with Docling Serve API using Pydantic models"
 readme = "README.md"
 requires-python = ">=3.8.1"
@@ -89,4 +89,10 @@ python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+[dependency-groups]
+dev = [
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
+]
 

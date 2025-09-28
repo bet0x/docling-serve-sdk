@@ -41,7 +41,7 @@ class OutputFormat(str, Enum):
 class ImageRefMode(str, Enum):
     """Image reference mode enumeration."""
     EMBEDDED = "embedded"
-    REFERENCE = "reference"
+    REFERENCE = "referenced"
     PLACEHOLDER = "placeholder"
 
 
